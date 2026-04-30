@@ -33,6 +33,9 @@ internal static partial class HackRfNative
     [LibraryImport("hackrf", EntryPoint = "hackrf_set_amp_enable")]
     public static partial int SetAmpEnable(IntPtr device, byte value);
 
+    [LibraryImport("hackrf", EntryPoint = "hackrf_set_baseband_filter_bandwidth")]
+    public static partial int SetBasebandFilterBandwidth(IntPtr device, uint bandwidthHz);
+
     [LibraryImport("hackrf", EntryPoint = "hackrf_start_rx")]
     public static partial int StartRx(IntPtr device, HackRfRxCallback callback, IntPtr ctx);
 

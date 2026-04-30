@@ -48,6 +48,8 @@ public static class SignalClassifier
         else
             type = "WIDEBAND";
 
+        type += GetHfBandName(reading.FrequencyHz);
+
         if (reading.LevelDbfs >= settings.CriticalDbfs)
             return (type, "CRITICAL", "MUTE AUDIO / critical receiver level", true, settings.SmartMuteCritical);
 
@@ -58,5 +60,32 @@ public static class SignalClassifier
             return (type, "WATCH", "Wideband activity below alert threshold", true, false);
 
         return (type, "NORMAL", "No action", false, false);
+    }
+
+    private static string GetHfBandName(double freqHz)
+    {
+        double mhz = freqHz / 1_000_000.0;
+        if (mhz >= 1.8 && mhz <= 2.0) return " (160m Amateur)";
+        if (mhz >= 3.5 && mhz <= 4.0) return " (80m Amateur)";
+        if (mhz >= 5.33 && mhz <= 5.41) return " (60m Amateur)";
+        if (mhz >= 7.0 && mhz <= 7.3) return " (40m Amateur)";
+        if (mhz >= 10.1 && mhz <= 10.15) return " (30m Amateur)";
+        if (mhz >= 14.0 && mhz <= 14.35) return " (20m Amateur)";
+        if (mhz >= 18.068 && mhz <= 18.168) return " (17m Amateur)";
+        if (mhz >= 21.0 && mhz <= 21.45) return " (15m Amateur)";
+        if (mhz >= 24.89 && mhz <= 24.99) return " (12m Amateur)";
+        if (mhz >= 28.0 && mhz <= 29.7) return " (10m Amateur)";
+        if (mhz >= 26.965 && mhz <= 27.405) return " (CB Radio)";
+        if (mhz >= 8.7 && mhz <= 8.9) return " (Marine/Aviation)";
+        if (mhz >= 13.0 && mhz <= 13.4) return " (Marine/Aviation)";
+        
+        // General SW broadcast bands
+        if (mhz >= 5.9 && mhz <= 6.2) return " (49m Broadcast)";
+        if (mhz >= 9.4 && mhz <= 9.9) return " (31m Broadcast)";
+        if (mhz >= 11.6 && mhz <= 12.1) return " (25m Broadcast)";
+        if (mhz >= 13.5 && mhz <= 13.9) return " (22m Broadcast)";
+        if (mhz >= 15.1 && mhz <= 15.8) return " (19m Broadcast)";
+
+        return "";
     }
 }

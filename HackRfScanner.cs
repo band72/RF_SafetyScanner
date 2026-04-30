@@ -20,8 +20,9 @@ public sealed class HackRfScanner : IRadioScanner
         Check(HackRfNative.Open(out _device), "hackrf_open");
 
         Check(HackRfNative.SetSampleRate(_device, 2_000_000), "hackrf_set_sample_rate");
-        Check(HackRfNative.SetLnaGain(_device, 8), "hackrf_set_lna_gain");
-        Check(HackRfNative.SetVgaGain(_device, 10), "hackrf_set_vga_gain");
+        Check(HackRfNative.SetBasebandFilterBandwidth(_device, 1_750_000), "hackrf_set_baseband_filter_bandwidth");
+        Check(HackRfNative.SetLnaGain(_device, 6), "hackrf_set_lna_gain");
+        Check(HackRfNative.SetVgaGain(_device, 6), "hackrf_set_vga_gain");
         Check(HackRfNative.SetAmpEnable(_device, 0), "hackrf_set_amp_enable");
 
         _callback = RxCallback;

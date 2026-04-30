@@ -8,5 +8,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>RF_SafetyScanner</AssemblyName>
     <RootNamespace>RF_SafetyScanner</RootNamespace>
+    <Version>3.1.0</Version>
   </PropertyGroup>
 </Project>

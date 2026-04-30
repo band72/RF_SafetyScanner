@@ -246,6 +246,8 @@ public partial class MainWindow : Window
         };
 
         _events.Insert(0, ev);
+        if (_events.Count > 1000)
+            _events.RemoveAt(_events.Count - 1);
 
         File.AppendAllText(_csvPath, $"{ev.Timestamp},{ev.FrequencyMhz:F6},{ev.LevelDbfs:F2},{ev.BandwidthKhz:F2},{ev.PulseScore:F3},{ev.SignalType},{ev.Severity},\"{ev.Action}\"\n");
         File.AppendAllText(_jsonPath, JsonSerializer.Serialize(ev) + "\n");
