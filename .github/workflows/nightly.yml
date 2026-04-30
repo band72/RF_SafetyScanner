@@ -1,0 +1,46 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Midnight UTC
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Publish application
+      run: dotnet publish RF_SafetyScanner.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o Publish
+
+    - name: Zip package
+      run: Compress-Archive -Path "Publish\*" -DestinationPath "RF_SafetyScanner_Nightly.zip" -Force
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: RF_SafetyScanner_Nightly
+        path: RF_SafetyScanner_Nightly.zip
+
+    - name: Create Nightly Release
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: nightly
+        name: "Nightly Build"
+        body: "Automated nightly build package (Application executable only. Ensure `hackrf.dll` and dependencies are placed next to the executable)."
+        prerelease: true
+        files: RF_SafetyScanner_Nightly.zip
